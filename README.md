@@ -19,7 +19,7 @@ Este proyecto implementa un sistema de gestión de créditos con FastAPI y Mongo
 1. Clona este repositorio:
 
    ```bash
-   git clone https://github.com/tu_usuario/mini-sistema-creditos-backend.git
+   git clone https://github.com/cedioza/mini-sistema-creditos
    cd mini-sistema-creditos-backend
 
 2. Crea un entorno virtual (opcional pero recomendado):
