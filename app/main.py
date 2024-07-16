@@ -11,6 +11,8 @@ from typing import Optional, List
 from . import models, schemas, crud
 from .database import SessionLocal, engine, get_db
 from .auth import oauth2_scheme
+from .mongodb import amortizacion_collection
+
 
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -168,17 +170,31 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 
 # Endpoint para generar el plan de amortización de un crédito específico
-@app.get("/creditos/{user_id}/plan-amortizacion", response_model=List[schemas.PlanAmortizacion])
+@app.get("/creditos/{user_id}/plan-amortizacion")
 async def generar_plan_amortizacion(user_id: int, db: Session = Depends(get_db)):
     creditos = crud.get_creditos_for_id(db, user_id=user_id)
 
     if not creditos:
         raise HTTPException(status_code=404, detail="Crédito no encontrado")
 
-    # plan_amortizacion = crud.calcular_plan_amortizacion(creditos)
-    plan_amortizacion = crud.calcular_plan_amortizacion(creditos)
+    try :
+        # plan_amortizacion = crud.calcular_plan_amortizacion(creditos)
+        crud.calcular_plan_amortizacion(creditos)
+        return {"message": "Plan de amortizacion creado con exito"}
 
+    except Exception as e :
 
-
-
-    return []
+        return {"message": f"error creando plan de amortización {e}" }
+    
+@app.get("/creditos/plan-amortizacion",response_model=List[dict])
+async def get_planes_amortizacion():
+    try:
+        cursor = amortizacion_collection.find({})  # Obtener el cursor
+        planes_amortizacion = []
+        async for plan in cursor:
+            plan['_id'] = str(plan['_id'])  # Convertir ObjectId a string
+            plan['fecha_creacion'] = datetime.now().isoformat()  # Agregar fecha de creación
+            planes_amortizacion.append(plan)
+        return planes_amortizacion
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener planes de amortización: {str(e)}")

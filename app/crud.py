@@ -97,8 +97,4 @@ def calcular_plan_amortizacion(creditos):
         })
         
 
-    print('plan_amortizaciones',plan_amortizaciones[0])
     amortizacion_collection.insert_many(plan_amortizaciones)
-    print('amortizaciones completada ')
-
-    return plan_amortizacion
