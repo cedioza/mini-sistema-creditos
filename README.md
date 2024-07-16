@@ -72,8 +72,6 @@ Este proyecto implementa un sistema de gestión de créditos con FastAPI y Mongo
     database.py: Configuración de la conexión a la base de datos MongoDB.
     crud.py: Operaciones CRUD para interactuar con la base de datos.
     schemas/: Esquemas Pydantic para validación de datos.
-    routers/: Enrutadores FastAPI para los diferentes endpoints.
-    utils/: Utilidades y funciones auxiliares.
     Funcionalidades
     Autenticación y Autorización: Utilización de JWT para autenticación segura de usuarios.
     Endpoints de Créditos: Gestión de solicitudes y aprobaciones de créditos.
